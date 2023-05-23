@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RiMenuLine, RiCloseLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -18,18 +27,26 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // Handle logout logic here
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <nav className="bg-gray-900 py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <a href="/" className="text-xl font-bold text-white">
+            <Link href="/" className="text-xl font-bold text-white">
               Holidaze
-            </a>
+            </Link>
           </div>
 
           <div className="sm:hidden">
@@ -41,33 +58,33 @@ const Navbar = () => {
           <div className="hidden sm:block">
             <ul className="flex space-x-4">
               <li>
-                <a href="#" className="text-white hover:text-gray-300 px-4 py-2">
+                <Link href="/" className="text-white hover:text-gray-300 px-4 py-2">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-white hover:text-gray-300 px-4 py-2">
+                <Link href="/Venues" className="text-white hover:text-gray-300 px-4 py-2">
                   Venues
-                </a>
+                </Link>
               </li>
               {isLoggedIn ? (
                 <>
                   <li>
-                    <a href="#" className="text-white hover:text-gray-300 px-4 py-2">
+                    <Link href="/profile" className="text-white hover:text-gray-300 px-4 py-2">
                       View Profile
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-white hover:text-gray-300 px-4 py-2" onClick={handleLogout}>
+                    <Link href="/" className="text-white hover:text-gray-300 px-4 py-2" onClick={handleLogout}>
                       Logout
-                    </a>
+                    </Link>
                   </li>
                 </>
               ) : (
                 <li>
-                  <a href="#" className="text-white hover:text-gray-300 px-4 py-2">
+                  <Link href="/register" className="text-white hover:text-gray-300 px-4 py-2">
                     Register
-                  </a>
+                  </Link>
                 </li>
               )}
             </ul>
